@@ -38,7 +38,7 @@ app.set("port", process.env.PORT || 5000);
 
 app
   .get("/", function (request, response) {
-    var result = "App is running";
+    var result = "Bot listo!";
     response.send(result);
   })
   .listen(app.get("port"), function () {
