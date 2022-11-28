@@ -36,7 +36,7 @@ var app = express();
 const port =  process.env.PORT || 4000;
 app.listen(port);
 app
-  .get("/", function (request, response) {
+  .get("/", (request, response) => {
     var result = "Bot listo!";
     response.send(result);
   })
