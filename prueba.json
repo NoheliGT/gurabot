@@ -1,0 +1,26 @@
+ {
+  "alumno":[{
+    "alumno": 1,
+    "carrera": "agricultura",
+    "cuatrimestre": "agronegocios",
+    "nivelacdemico": "tsu",
+    "objetivos": {
+        "DDLA":[
+            { "explica": 1},
+            {"relaciona": 3},
+            { "resuelve": 4},
+            {"propone": 3}
+            
+        ],
+        "ETC":[
+            { "comenta": 1},
+            {"crea": 3},
+            { "resuelve": 4},
+            {"dispone": 3}
+            
+        ]
+
+    }
+  }]
+
+}
