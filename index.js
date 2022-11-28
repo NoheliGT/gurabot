@@ -33,20 +33,15 @@ const google = require("googlethis");
 
 var app = express();
 
-
-app.set("port", process.env.PORT || 5000);
-
+const port =  process.env.PORT || 4000;
+app.listen(port);
 app
   .get("/", function (request, response) {
     var result = "Bot listo!";
     response.send(result);
   })
-  .listen(app.get("port"), function () {
-    console.log(
-      "App is running, server is listening on port ",
-      app.get("port")
-    );
-  });
+
+
 const mongoose = require("mongoose");
 const uri = `mongodb+srv://noheAdmin:nohepass21@cluster0.ujzdq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 /*const uri =
