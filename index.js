@@ -3390,7 +3390,7 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
   }
   if (action === "25") {
     text =
-      "Este módulo te ayudará a encontrar resultados a partir de una imagen, Gawr Gura encontrará los mejores resultados con los siguientes comandos: \n\n/sauce, /s: Responde a una imagen para dar con los 5 resultados más similares a la búsqueda. \n\n/reverse, /r: Respondes a una imagen y gawr gura te dará un resultado de búsqueda de Google.";
+      "Este módulo te ayudará a encontrar resultados a partir de una imagen, Gawr Gura encontrará los mejores resultados con los siguientes comandos: \n\n/sauce, /s: Responde a una imagen para hacer busqueda inversa con SAUCE NAO. \n\n/reverse, /r: Respondes a una imagen y gawr gura te dará un resultado de búsqueda de Google.";
   }
   if (action === "29") {
     text =
@@ -5114,65 +5114,65 @@ bot.onText(/\/serie (.+)/, function (msg, match) {
   }
 });
 
-bot.onText(/^\/sauce|^\/s/, function (msg) {
-  var chatid = msg.chat.id;
-  if (msg.reply_to_message == undefined) {
-    return;
-  }
-  var photo = msg.reply_to_message.photo[1].file_id;
-  bot.getFileLink(photo).then(function (enlace) {
-    console.log(enlace);
-    const doSomething = (results) => {
-      console.log(results[1].url, results[1].title);
-      bot.sendMessage(
-        chatid,
-        `<i><b>🔍Resultados para la búsqueda:</b></i> \n\n1⃣<a href="${results[1].url}">${results[1].title}</a> - \n\n2⃣<a href="${results[2].url}">${results[2].title}.</a> - \n\n3⃣<a href="${results[3].url}">${results[3].title}</a> - \n\n4⃣<a href="${results[4].url}">${results[4].title}</a> - \n\n5⃣<a href="${results[5].url}">${results[5].title}</a> -`,
-        {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "1.Resultado→",
-                  url: results[1].url,
-                  callback_data: "any",
-                },
-                {
-                  text: "2.Resultado→",
-                  url: results[2].url,
-                  callback_data: "any",
-                },
-              ],
-              [
-                {
-                  text: "3.Resultado→",
-                  url: results[3].url,
-                  callback_data: "any",
-                },
-              ],
-              [
-                {
-                  text: "4.Resultado→",
-                  url: results[4].url,
-                  callback_data: "any",
-                },
-                {
-                  text: "5.Resultado→",
-                  url: results[5].url,
-                  callback_data: "any",
-                },
-              ],
-            ],
-          },
-          parse_mode: "HTML",
-        }
-      );
-    };
+// bot.onText(/^\/sauce|^\/s/, function (msg) {
+//   var chatid = msg.chat.id;
+//   if (msg.reply_to_message == undefined) {
+//     return;
+//   }
+//   var photo = msg.reply_to_message.photo[1].file_id;
+//   bot.getFileLink(photo).then(function (enlace) {
+//     console.log(enlace);
+//     const doSomething = (results) => {
+//       console.log(results[1].url, results[1].title);
+//       bot.sendMessage(
+//         chatid,
+//         `<i><b>🔍Resultados para la búsqueda:</b></i> \n\n1⃣<a href="${results[1].url}">${results[1].title}</a> - \n\n2⃣<a href="${results[2].url}">${results[2].title}.</a> - \n\n3⃣<a href="${results[3].url}">${results[3].title}</a> - \n\n4⃣<a href="${results[4].url}">${results[4].title}</a> - \n\n5⃣<a href="${results[5].url}">${results[5].title}</a> -`,
+//         {
+//           reply_markup: {
+//             inline_keyboard: [
+//               [
+//                 {
+//                   text: "1.Resultado→",
+//                   url: results[1].url,
+//                   callback_data: "any",
+//                 },
+//                 {
+//                   text: "2.Resultado→",
+//                   url: results[2].url,
+//                   callback_data: "any",
+//                 },
+//               ],
+//               [
+//                 {
+//                   text: "3.Resultado→",
+//                   url: results[3].url,
+//                   callback_data: "any",
+//                 },
+//               ],
+//               [
+//                 {
+//                   text: "4.Resultado→",
+//                   url: results[4].url,
+//                   callback_data: "any",
+//                 },
+//                 {
+//                   text: "5.Resultado→",
+//                   url: results[5].url,
+//                   callback_data: "any",
+//                 },
+//               ],
+//             ],
+//           },
+//           parse_mode: "HTML",
+//         }
+//       );
+//     };
 
-    reverseImageSearch(enlace, doSomething).catch(function (error) {
-      bot.sendMessage(chatid, "No he dado con la búsqueda:(");
-    });
-  });
-});
+//     reverseImageSearch(enlace, doSomething).catch(function (error) {
+//       bot.sendMessage(chatid, "No he dado con la búsqueda:(");
+//     });
+//   });
+// });
 
 /* bot.onText(/\/c (.+)/, function (msg, match) {
   var c = match[1];
@@ -5211,6 +5211,58 @@ bot.onText(/^\/sauce|^\/s/, function (msg) {
 
   main();
 }); */
+
+bot.onText(/\/sauce/, function (msg) {
+  var chatId = msg.chat.id;
+  if (msg.reply_to_message == undefined) {
+    return;
+  }
+  var photo = msg.reply_to_message.photo[1].file_id;
+  bot.getFileLink(photo).then(function (enlace) {
+    request(
+      `https://saucenao.com/search.php?db=999&output_type=2&api_key=a4ca93aeda88c85c6c7be58e9bb2a0c4c3d477ca&testmode=1&numres=5&url=${enlace}`,
+      function (error, response, body) {
+        try {
+          if (!error && response.statusCode == 200) {
+            var res = JSON.parse(body);
+            bot.sendMessage(
+              chatId,
+              `<i><b>🔍Resultados para la búsqueda:</b></i> \n\n⭐1. ${res.results[0].header.index_name} \n<code>Similitud: ${res.results[0].header.similarity}</code>\n\n⭐2. ${res.results[1].header.index_name} \n<code>Similitud: ${res.results[1].header.similarity}</code>\n\n⭐3. ${res.results[2].header.index_name} \n<code>Similitud: ${res.results[2].header.similarity}</code>`,
+              {
+                reply_markup: {
+                  inline_keyboard: [
+                    [
+                      {
+                        text: "1.Resultado→",
+                        url: res.results[0].header.thumbnail,
+                        callback_data: "any",
+                      },
+                      {
+                        text: "2.Resultado→",
+                        url:  res.results[1].header.thumbnail,
+                        callback_data: "any",
+                      },
+                    ],
+                    [
+                      {
+                        text: "3.Resultado→",
+                        url: res.results[2].header.thumbnail,
+                        callback_data: "any",
+                      }
+                    ],
+                  ],
+                },
+                parse_mode: "HTML",
+              }
+            );
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    );
+  });
+});
 /**************************************DICCIONARIO***************************************************************************** */
 bot.onText(/\/diccionario (.+)/, function (msg, match) {
   var d = match[1];
