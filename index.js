@@ -113,6 +113,11 @@ bot.onText(/^\/usuariosgban/, (msg) => {
   bot.sendDocument(chatId, "UsuariosGban.txt")
 
 });
+bot.onText(/^\/cambio/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, "actualizado!")
+
+});
 
 
 
