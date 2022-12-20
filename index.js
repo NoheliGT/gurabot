@@ -7760,31 +7760,46 @@ bot.onText(/^\.reverse|^\/reverse/, function (msg) {
   if (msg.reply_to_message == undefined) {
     return;
   }
-  var photo = msg.reply_to_message.photo[1].file_id;
-  bot.getFileLink(photo).then(function (enlace) {
-    async function start() {
       try {
-        const reverse = await google.search(enlace, { ris: true });
-        bot.sendMessage(chatid, `<code>${reverse.results[0].title}</code>`, {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "🔍Resultado de búsqueda→",
-                  url: reverse.results[0].url,
-                  callback_data: "any",
-                },
-              ],
-            ],
-          },
-          parse_mode: "HTML",
-        });
-      } catch (error) {
+        if (msg.reply_to_message.photo) {
+          // Get the photo file_id
+          var photoId = msg.reply_to_message.photo[msg.reply_to_message.photo.length - 1].file_id;
+         bot.downloadFile(photoId, "./download").then(function (path) {
+
+            console.log("hecho " + path);
+            async function start() { //C:\Users\Usuario PC\Documents\01 Gura\01 GURA\download\file_37.jpg
+              try {
+                const my_awesome_image = fs.readFileSync(path);
+                const reverse = await google.search(my_awesome_image, { ris: true });
+                console.log(reverse.results[0].title)
+                bot.sendMessage(chatid, `<code>${reverse.results[0].title}</code>`, {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        {
+                          text: "🔍Resultado de búsqueda→",
+                          url: reverse.results[0].url,
+                          callback_data: "any",
+                        },
+                      ],
+                    ],
+                  },
+                  parse_mode: "HTML",
+                });
+                fs.unlinkSync(path);
+                console.log("!borrado...")
+              } catch (error) {
+                console.log(error);
+                bot.sendMessage(chatid, "Parece que hubo un error:(");
+              }
+             }
+             start();
+          });
+      }
+    } catch (error) {
+        console.log(error);
         bot.sendMessage(chatid, "Parece que hubo un error:(");
       }
-     }
-     start();
-  });
 });
 
 bot.onText(/\/quote/, (msg) => {
